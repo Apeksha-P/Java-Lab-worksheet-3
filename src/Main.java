@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 abstract class BorrowableItems{
     abstract void displayInfo();
 }
@@ -42,6 +45,56 @@ class Book extends BorrowableItems{
         System.out.println("Author : "+author);
         System.out.println("ISBN : "+ISBN);
         System.out.println("Available : "+available);
+    }
+}
+class Person{
+    private String name;
+    public Person(String name){
+        this.name=name;
+    }
+    public String getName(){
+        return name;
+    }
+    public void setName(String name){
+        this.name=name;
+    }
+}
+class Student extends Person{
+    public Student(String name){
+        super(name);
+    }
+}
+class Library{
+    private List<BorrowableItems>borrowableItemsList = new ArrayList<>();
+    public void addLibraryItem(BorrowableItems item){
+        borrowableItemsList.add(item);
+    }
+    public void checkoutItem(String title){
+        for (BorrowableItems item : borrowableItemsList){
+            if(item instanceof Book){
+                Book book = (Book) item;
+                if (book.getTitle().equals(title)&& book.isAvailable()){
+                    book.setAvailable(false);
+                    System.out.println("Check out: "+title);
+                    return;
+                }
+            }
+        }
+        System.out.println("Book not found or already checked out: "+title);
+    }
+    public void listAvailableItems(){
+        System.out.println("Available items in the library: ");
+        for (BorrowableItems item : borrowableItemsList){
+            if(item instanceof Book){
+                Book book = (Book) item;
+                if (book.isAvailable()){
+                    book.displayInfo();
+                }
+            }
+        }
+    }
+    public void displayLibraryInfo(){
+        System.out.println("Total number of items in the library: "+borrowableItemsList.size());
     }
 }
 public class Main {
